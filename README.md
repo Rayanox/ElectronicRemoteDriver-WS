@@ -16,9 +16,11 @@ Depending on the time the method is called, the commands returned by the WS can 
 There must be one configuration file per **Program-ID**. This file give the algoritmh of the commands to send to the device, depending on the time it is called.
 
 The synthax is explained here:
+```
 #Command Mapping#{1=X; 2=Haut ; 3=O;4=PS;5=BAS}
 #Commands Sequence#{X-X-PS(2)-BAS-BAS-X-Sleep(5)-O-O}
-[Since]
+[15:00-20:00]{X-X-PS(10)-O}
+```
 
 with:
 - The first line is dedicated to command mapping

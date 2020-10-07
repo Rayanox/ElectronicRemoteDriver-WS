@@ -1,26 +1,38 @@
-# VideoAlarmClock-WS
-This repository is the server part of a bigger project which goal is to make a totally customizable video alarm clock, for people who feel the wake up moment as difficult, like me. The big project is composed of two parts: The device controling both a TV and a PlayStation (4) remote control, and this WS that is reached by the device to get the informations about the alarm time and the control sequence to execute on the remote controls.
+# Presentation
 
-_**If you want to use an alternative system than the Playstation 4 and you are motivated to contribute to make this possible**, please **create an issue** and I will invest my efforts to adapt the code to drive different kind of devices._
+The project is a Web Service that drives a set of electronic device (remotely) using a command configuration file on the server-side. The final goal is to be able to drive any electronic device (and change the algorithm) without recompiling any component (Arduino or WS).
 
-# Web Service part #
+# WS Method
 
-There are 10 methods endpoints that are used to provide informations to the Arduino device or to update an info.
-
-- **getCommands** : returns a sequence of commands that the Arduino will act.
-- **help** : return all the endpoints list
-- **helpFormulasListInfos** : return the codes of each wakeup formula 
-- **getShutdownTimer** : returns the amount of seconds before the Arduino shutdown all the devices before sleeping
-- setShutdownTimer : set the amount of seconds before the Arduino shutdown all the devices before sleeping
-- **getTimeAlarm** : returns the time the alarm will run.
-- setTimeAlarm : set the time the alarm will run.
-- **getVolum** : returns the sound level to set to the TV at wakeup time.
-- setVolum : sets the sound level to set to the TV at wakeup time.
-- **UpdatePlaylist** : Update the custom Youtube playlist a according to the formula that is set in configuration file.
+The main WS Method to reach is "GetCommands". It takes 2 parameters:
+ 1) The Access-Token, to increase the security.
+ 2) **The Program-ID**: it's a String ID (name) that relates to a specific device.
+ 
+Depending on the time the method is called, the commands returned by the WS can be different, all the logic is located in the WS, instead of in the remote electronic device.
 
 
-# Arduino part #
+# Configuration File 
 
-Link of the related repo: https://github.com/RayanoxPersonalProjects/VideoAlarmClock
+There must be one configuration file per **Program-ID**. This file give the algoritmh of the commands to send to the device, depending on the time it is called.
 
-The arduino program is implemented in C language, meaning that the exchange messages won't be coded with an Object-Json conversion, but will follow a custom protocol that I invented, espacially for this project needs. The exchange protocol doc synthax is writen in a specific text file "Exchange_Protocol.txt"
+The synthax is explained here:
+#Command Mapping#{1=X; 2=Haut ; 3=O;4=PS;5=BAS}
+#Commands Sequence#{X-X-PS(2)-BAS-BAS-X-Sleep(5)-O-O}
+[Since]
+
+with:
+- The first line is dedicated to command mapping
+- All the lines > 1 are dedicated to the sequence algorithm
+- in command mapping: the key is the **pin number of the microcontroller**
+- the value is the command name that will be written in the command sequence
+- A command with parenthesis is pushed during the number of seconds written between the two parenthesis. The parameter is a double.
+- There are special commands that are not declared in the command mapping:
+   -> Sleep(X): With X = time to sleep in seconds
+- Comments are written between '#' and are only declared at starting of the line. If there is only one '#', all the line is commented
+- A command line can start with a time interval check: it means that if the current time (when the service is called) is inside the time interval, then this command line sequence is returned.
+
+
+
+# Project example
+
+A project using this Remote Driver is explained here: https://github.com/RayanoxPersonalProjects/VideoAlarmClock . But the project is not used (deprecated), instead it uses this current repository in a version more generic.

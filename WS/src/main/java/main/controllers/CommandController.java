@@ -28,7 +28,7 @@ public class CommandController extends AbstractController{
 	ICommandProvider commandProvider;
 
     @RequestMapping(value = "/getCommands", method = RequestMethod.GET)
-    public String GetCommands(@RequestParam(value = "token") String token, char contentTypeCode) throws AuthenticationException {
+    public String GetCommands(@RequestParam(value = "token") String token, Character contentTypeCode) throws AuthenticationException {
     	String failedAuthMessage = processAuthorization(token);
     	if(failedAuthMessage != null)
     		return failedAuthMessage;

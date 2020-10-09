@@ -15,7 +15,7 @@ import main.model.youtube.playlist.PlaylistContentGroupInfo;
 import main.model.youtube.playlist.PlaylistVideoType;
 import main.model.youtube.playlist.RetrievingSequenceType;
 import main.model.youtube.playlist.VideoItem;
-import main.providers.DataStorage;
+import main.storage.DataStorage;
 import main.utils.Converter;
 
 @Component

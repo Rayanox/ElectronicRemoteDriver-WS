@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import main.controllers.common.AbstractController;
 import main.model.ErrorBuilder;
-import main.providers.DataStorage;
+import main.storage.DataStorage;
 import main.utils.Converter;
 
 @RestController

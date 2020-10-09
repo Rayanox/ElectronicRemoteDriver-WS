@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import main.authentication.ServerTokenProvider;
 import main.model.ErrorBuilder;
-import main.providers.DataStorage;
+import main.storage.DataStorage;
 import main.utils.Converter;
 
 public class AbstractController {

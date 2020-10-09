@@ -27,6 +27,8 @@ deploy:
   skip_cleanup: true
   # on:
   #   tags: true
+  on:
+    all_branches: true
   script: >-
     echo "   --- ls ---"
     && ls -l

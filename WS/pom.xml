@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.rb.servers</groupId>
-    <artifactId>videoalarmclock.ws</artifactId>
+    <artifactId>electronic-remote-driver-ws</artifactId>
     <version>1.0.0</version>
     <packaging>jar</packaging>
 

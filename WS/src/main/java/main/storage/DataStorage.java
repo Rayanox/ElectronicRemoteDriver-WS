@@ -1,4 +1,4 @@
-package main.providers;
+package main.storage;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -8,18 +8,14 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.Time;
-import java.util.Calendar;
 import java.util.HashMap;
-
 import org.springframework.stereotype.Repository;
-import org.springframework.stereotype.Service;
-
 import main.exceptions.BadFormatPropertyException;
 import main.exceptions.NotImplementedException;
 import main.utils.Converter;
 
 @Repository
-public class DataStorage {
+public class DataStorage implements ICachable{
 	
 	private final String cacheLocation = "config" + File.separator + "StoredData.conf";
 	

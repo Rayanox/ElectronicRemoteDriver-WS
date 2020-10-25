@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import main.controllers.common.AbstractController;
-import main.model.CommandSequence;
-import main.model.CommandSequenceBuilder;
+import main.model.OldCommandSequence;
+import main.model.OldCommandSequenceBuilder;
 import main.model.ContentType;
 import main.model.ErrorBuilder;
 import main.model.dto.CommandDto;
@@ -40,7 +40,7 @@ public class CommandController extends AbstractController{
     	String result = String.format("(Content type = %s) - ", contentType.toString());
     	try {
     		String commands = ""; 
-    		CommandSequence contentCommands;
+    		OldCommandSequence contentCommands;
     		CommandDto commandDto = new CommandDto();
     		
     		// Compute the content commands
@@ -88,7 +88,7 @@ public class CommandController extends AbstractController{
 		else if(!firstCommand.isEmpty() && secondCommand.isEmpty())
 			return firstCommand;
 		else if(!firstCommand.isEmpty() && !secondCommand.isEmpty()) 
-			return firstCommand + CommandSequenceBuilder.delimiter + secondCommand;
+			return firstCommand + OldCommandSequenceBuilder.delimiter + secondCommand;
 		else
 			return Strings.EMPTY;
 	}

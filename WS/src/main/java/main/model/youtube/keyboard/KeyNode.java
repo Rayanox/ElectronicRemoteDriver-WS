@@ -2,7 +2,7 @@ package main.model.youtube.keyboard;
 
 import java.util.HashMap;
 
-import main.model.Command;
+import main.model.OldCommand;
 import main.model.DeviceAction;
 
 public class KeyNode {
@@ -62,19 +62,19 @@ public class KeyNode {
 		KeyNode nextKeyNode = this.mapGoToClosest.get(character).nextKeyNodeClosestDistance;
 
 		if(nodeUp != null && !nodeUp.isBridgeKeyNode() && nodeUp.getCharacter().equals(nextKeyNode.getCharacter())) {
-			return new NextKeyNodeCommand(nextKeyNode, Command.Create(DeviceAction.Up));
+			return new NextKeyNodeCommand(nextKeyNode, OldCommand.Create(DeviceAction.Up));
 		}else if(nodeDown != null && !nodeDown.isBridgeKeyNode() && nodeDown.getCharacter().equals(nextKeyNode.getCharacter())) {
-			return new NextKeyNodeCommand(nextKeyNode, Command.Create(DeviceAction.Down));
+			return new NextKeyNodeCommand(nextKeyNode, OldCommand.Create(DeviceAction.Down));
 		}else if(nodeLeft != null && !nodeLeft.isBridgeKeyNode() && nodeLeft.getCharacter().equals(nextKeyNode.getCharacter())) {
-			return new NextKeyNodeCommand(nextKeyNode, Command.Create(DeviceAction.Left));
+			return new NextKeyNodeCommand(nextKeyNode, OldCommand.Create(DeviceAction.Left));
 		}else if(nodeRight != null && !nodeRight.isBridgeKeyNode() && nodeRight.getCharacter().equals(nextKeyNode.getCharacter())) {
-			return new NextKeyNodeCommand(nextKeyNode, Command.Create(DeviceAction.Right));
+			return new NextKeyNodeCommand(nextKeyNode, OldCommand.Create(DeviceAction.Right));
 		
 		// Bridge case
 		}else if(this.isBridgeKeyNode() && nextKeyNode == nodeKeyBridgeTarget) {
-			return new NextKeyNodeCommand(nextKeyNode, Command.Create(DeviceAction.X));
+			return new NextKeyNodeCommand(nextKeyNode, OldCommand.Create(DeviceAction.X));
 		}else if(nodeRight != null && nodeRight.isBridgeKeyNode) { // Case of the adjacent bridge node ('N' or ':'), to go to the bridge at the right side
-			return new NextKeyNodeCommand(nextKeyNode, Command.Create(DeviceAction.Right));
+			return new NextKeyNodeCommand(nextKeyNode, OldCommand.Create(DeviceAction.Right));
 			
 		}else {
 			throw new Exception("A development conception mistake is present. No adjacent node is the closest node to go detected.");

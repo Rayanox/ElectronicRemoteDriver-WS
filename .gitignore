@@ -4,3 +4,4 @@
 target
 **/tokens/**
 **/config/StoredData.conf
+**/*.log

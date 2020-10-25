@@ -16,6 +16,8 @@ import main.model.youtube.playlist.PlaylistVideoType;
 import main.model.youtube.playlist.RetrievingSequenceType;
 import main.model.youtube.playlist.VideoItem;
 import main.storage.DataStorage;
+import main.storage.types.ConfTypeInt;
+import main.storage.types.ConfTypeString;
 import main.utils.Converter;
 
 @Component
@@ -46,7 +48,7 @@ public class YoutubeManager {
 	}
 
 	public void UpdateYoutubePlaylist(CommandDto commandDto) throws Exception {
-		Integer formulaCode = (Integer) dataStorage.getData(FORMULA_SELECTED_CONFIG_NAME, Integer.class, DEFAULT_FORMULA);
+		Integer formulaCode = (Integer) this.dataStorage.getData(ConfTypeString.buildFromString(FORMULA_SELECTED_CONFIG_NAME).get()).orElse(ConfTypeInt.buildFrom(DEFAULT_FORMULA)).getValue();
 		
 		UpdateYoutubePlaylist(formulaCode, commandDto); 
 	}

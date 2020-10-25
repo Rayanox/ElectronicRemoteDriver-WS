@@ -1,7 +1,7 @@
 package main.model.youtube.keyboard;
 
-import main.model.CommandSequenceBuilder;
+import main.model.OldCommandSequenceBuilder;
 
 public interface IYoutubeKeyboardTextCommandFactory {
-	CommandSequenceBuilder addCommandsFromText(CommandSequenceBuilder commandBuilder, String text, Character startPosition) throws Exception;
+	OldCommandSequenceBuilder addCommandsFromText(OldCommandSequenceBuilder commandBuilder, String text, Character startPosition) throws Exception;
 }

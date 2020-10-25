@@ -3,7 +3,7 @@ package main.model.youtube.keyboard;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import main.model.CommandSequenceBuilder;
+import main.model.OldCommandSequenceBuilder;
 
 public class YoutubeKeyboardTextCommandFactory implements IYoutubeKeyboardTextCommandFactory {
 
@@ -64,7 +64,7 @@ public class YoutubeKeyboardTextCommandFactory implements IYoutubeKeyboardTextCo
 
 
 	@Override
-	public CommandSequenceBuilder addCommandsFromText(CommandSequenceBuilder commandBuilder, String text, Character startPosition) throws Exception {
+	public OldCommandSequenceBuilder addCommandsFromText(OldCommandSequenceBuilder commandBuilder, String text, Character startPosition) throws Exception {
 		KeyNode currentNode = getKeyNodeReferenced(startPosition, this.firstKeyboardArray);
 		text = text.toUpperCase(); //There is no distinction between lower or upper case in youtube (Youtube PS Keyboard)
 		

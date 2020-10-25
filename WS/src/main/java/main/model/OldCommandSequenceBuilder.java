@@ -7,20 +7,20 @@ import main.exceptions.NotImplementedException;
 import main.model.youtube.keyboard.IYoutubeKeyboardTextCommandFactory;
 import main.model.youtube.keyboard.YoutubeKeyboardTextCommandFactory;
 
-public class CommandSequenceBuilder {
+public class OldCommandSequenceBuilder {
 		
 	private IYoutubeKeyboardTextCommandFactory youtubeKeyboardCommandManager;
 	
-	private CommandSequence commandSequence;
+	private OldCommandSequence commandSequence;
 	
 	public static final char delimiter = '-'; 
 	
-	private CommandSequenceBuilder(IYoutubeKeyboardTextCommandFactory youtubeKeyboardCommandManager) {
+	private OldCommandSequenceBuilder(IYoutubeKeyboardTextCommandFactory youtubeKeyboardCommandManager) {
 		this.youtubeKeyboardCommandManager = youtubeKeyboardCommandManager;
-		this.commandSequence = new CommandSequence();
+		this.commandSequence = new OldCommandSequence();
 	}
 	
-	private CommandSequenceBuilder() {
+	private OldCommandSequenceBuilder() {
 		this(new YoutubeKeyboardTextCommandFactory());
 	}
 	
@@ -29,34 +29,34 @@ public class CommandSequenceBuilder {
 	 * @param needYoutubeKeyboard if false, it optimize this object creation because the 'youtubeKeyboardCommandManager' costs because of a complex algorithm
 	 * @return
 	 */
-	public static CommandSequenceBuilder CreateCommandSequence(boolean needYoutubeKeyboard) {
-		return needYoutubeKeyboard ? new CommandSequenceBuilder() : new CommandSequenceBuilder(null);
+	public static OldCommandSequenceBuilder CreateCommandSequence(boolean needYoutubeKeyboard) {
+		return needYoutubeKeyboard ? new OldCommandSequenceBuilder() : new OldCommandSequenceBuilder(null);
 	}
 	
-	public CommandSequenceBuilder addCommand(Command cmd) {
+	public OldCommandSequenceBuilder addCommand(OldCommand cmd) {
 		this.commandSequence.addBtnCommand(cmd);
 		return this;
 	}
 	
-	public CommandSequenceBuilder addCommand(DeviceAction action) {
+	public OldCommandSequenceBuilder addCommand(DeviceAction action) {
 		this.commandSequence.addBtnCommand(action);
 		return this;
 	}
 	
-	public CommandSequenceBuilder addAllCommands(Command [] commands) {
-		for (Command psButton : commands) {
+	public OldCommandSequenceBuilder addAllCommands(OldCommand [] commands) {
+		for (OldCommand psButton : commands) {
 			this.commandSequence.addBtnCommand(psButton);
 		}
 		return this;
 	}
-	public CommandSequenceBuilder addAllCommands(CommandSequence commands) {
-		for (Command psButton : commands.getBtnSequence()) {
+	public OldCommandSequenceBuilder addAllCommands(OldCommandSequence commands) {
+		for (OldCommand psButton : commands.getBtnSequence()) {
 			this.commandSequence.addBtnCommand(psButton);
 		}
 		return this;
 	}
 	
-	public CommandSequenceBuilder addClickCommand() {
+	public OldCommandSequenceBuilder addClickCommand() {
 		this.commandSequence.addBtnCommand(DeviceAction.X);
 		return this;
 	}
@@ -68,7 +68,7 @@ public class CommandSequenceBuilder {
 	 * @param times
 	 * @return
 	 */
-	public CommandSequenceBuilder addCommand(Command cmd, int times) {
+	public OldCommandSequenceBuilder addCommand(OldCommand cmd, int times) {
 		for (int i = 0; i < times; i++) {
 			this.commandSequence.addBtnCommand(cmd);
 		}
@@ -106,7 +106,7 @@ public class CommandSequenceBuilder {
 	 *  Predefined command sequences
 	 */
 	
-	public CommandSequenceBuilder typeTextInYoutube(String text) throws Exception {
+	public OldCommandSequenceBuilder typeTextInYoutube(String text) throws Exception {
 		// Get the youtube commands to type the text
 		youtubeKeyboardCommandManager.addCommandsFromText(this, text, 'A');
 		
@@ -114,7 +114,7 @@ public class CommandSequenceBuilder {
 		return this.addCommand(DeviceAction.Down).addCommand(DeviceAction.Down).addCommand(DeviceAction.O);
 	}
 
-	public CommandSequenceBuilder browseToYoutube() {
+	public OldCommandSequenceBuilder browseToYoutube() {
 		//Go to the applications folder
 		return this.addCommand(DeviceAction.Right).addCommand(DeviceAction.Right).addCommand(DeviceAction.Right).addCommand(DeviceAction.Right).addCommand(DeviceAction.Right).addCommand(DeviceAction.O)
 		// Select Youtube
@@ -123,12 +123,12 @@ public class CommandSequenceBuilder {
 		.addCommand(DeviceAction.Down).addCommand(DeviceAction.Down).addCommand(DeviceAction.Down).addCommand(DeviceAction.O).addCommand(DeviceAction.Sleep).addCommand(DeviceAction.O);
 	}
 
-	public CommandSequenceBuilder sleep(long i) {
-		return this.addCommand(Command.Create(DeviceAction.Sleep, i));
+	public OldCommandSequenceBuilder sleep(long i) {
+		return this.addCommand(OldCommand.Create(DeviceAction.Sleep, i));
 	}
 
-	public CommandSequenceBuilder sendHttpGetRequest(String url) {
-		return this.addCommand(Command.Create(DeviceAction.HTTP_GET, String.format("\"%s\"", url)));
+	public OldCommandSequenceBuilder sendHttpGetRequest(String url) {
+		return this.addCommand(OldCommand.Create(DeviceAction.HTTP_GET, String.format("\"%s\"", url)));
 	}
 
 	
@@ -145,7 +145,7 @@ public class CommandSequenceBuilder {
 		return youtubeKeyboardCommandManager;
 	}
 	
-	public CommandSequence getCommandSequence() {
+	public OldCommandSequence getCommandSequence() {
 		return commandSequence;
 	}
 }

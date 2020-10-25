@@ -17,19 +17,23 @@ package main;
 
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
-import main.model.CommandSequenceBuilder;
+import org.junit.runner.RunWith;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import main.model.OldCommandSequenceBuilder;
 import main.model.youtube.keyboard.IYoutubeKeyboardTextCommandFactory;
 
 //@RunWith(SpringRunner.class)
 //@SpringBootTest()
 //@AutoConfigureMockMvc
+@RunWith(SpringJUnit4ClassRunner.class)
 public class YoutubeKeyboardTextCommandFactoryTests {
 
     @Test
     public void YoutubeTextGenerationCommandTest() throws Exception {
 
     	// Arrange
-    	CommandSequenceBuilder commandBuilder = CommandSequenceBuilder.CreateCommandSequence(true);
+    	OldCommandSequenceBuilder commandBuilder = OldCommandSequenceBuilder.CreateCommandSequence(true);
     	IYoutubeKeyboardTextCommandFactory youtubeKeyboardFactory = commandBuilder.getYoutubeKeyboardCommandManager();
     	String textToTest = "Un petit test";
     	String resultExpected = "D-D-R-R-R-R-R-R-X-U-X-D-D-L-L-L-L-L-L-D-X-U-U-R-X-U-U-R-R-R-X-D-D-R-X-U-L-L-L-L-X-D-R-R-R-R-X-D-L-L-L-L-L-D-X-U-U-R-R-R-R-R-X-U-U-L-X-D-D-X-R-X";
@@ -48,7 +52,7 @@ public class YoutubeKeyboardTextCommandFactoryTests {
     public void YoutubeTextGenerationCommand_SimpleTestOnBothKeyboardsTest() throws Exception {
 
     	// Arrange
-    	CommandSequenceBuilder commandBuilder = CommandSequenceBuilder.CreateCommandSequence(true);
+    	OldCommandSequenceBuilder commandBuilder = OldCommandSequenceBuilder.CreateCommandSequence(true);
     	IYoutubeKeyboardTextCommandFactory youtubeKeyboardFactory = commandBuilder.getYoutubeKeyboardCommandManager();
     	String textToTest = "Le 92i";
     	String resultExpected = "D-R-R-R-R-X-U-X-D-D-D-L-L-L-L-D-X-U-U-U-R-R-R-R-R-R-R-X-L-D-L-L-L-L-X-U-U-L-X-D-R-R-R-R-R-R-X-L-L-L-L-L-L-X";

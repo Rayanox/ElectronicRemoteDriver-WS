@@ -1,45 +1,67 @@
 package main.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
-public class CommandSequence {
+import main.exceptions.NotImplementedException;
+import main.storage.types.IStorageType;
+
+public class CommandSequence implements IStorageType {
 	
 	private ArrayList<Command> btnSequence;
+	private HashMap<String, String> commandMapping;
 	
 	public CommandSequence() {
 		this.btnSequence = new ArrayList<Command>();
+		this.commandMapping = new HashMap<>();
 	}
 	
 	public void addBtnCommand(Command btn) {
 		this.btnSequence.add(btn);
 	}
 	
-	public void addBtnCommand(DeviceAction action) {
+	public void addBtnCommand(String action) {
 		this.btnSequence.add(Command.Create(action));
 	}
 	
-	public void addBtnCommand(DeviceAction action, Long secondsDuring) {
-		this.btnSequence.add(Command.Create(action, secondsDuring));
+	/*
+	 * Mapping
+	 */
+	public void addToCommandsMapping(String commandFrom, String commandTo) {
+		this.commandMapping.put(commandFrom, commandTo);
 	}
 	
-	public void addBtnCommand(DeviceAction action, String stringParam) {
-		this.btnSequence.add(Command.Create(action, stringParam));
-	}
-	
+	/*
+	 * End Mapping
+	 */
 	
 	
 	public ArrayList<Command> getBtnSequence() {
 		return btnSequence;
 	}
 	
-	public boolean compare(CommandSequence seqCompared) {
-		if(btnSequence.size() != seqCompared.getBtnSequence().size())
-			return false;
-		for(int i = 0; i < btnSequence.size(); i++) {
-			if(!btnSequence.get(i).equals(seqCompared.getBtnSequence().get(i)))
-				return false;
-		}
-		return true;
+	public String toStringRequest() throws NotImplementedException {
+		//TODO A coder, et on utilisera le mapping
+		throw new NotImplementedException();
+	}
+
+	/*
+	 * For Conf String encapsulation
+	 * 
+	 */
+	
+	@Override
+	public String convertToString() {
+		return null;
+	}
+
+	public static CommandSequence buildFromString(String textValue) throws NotImplementedException {
+		throw new NotImplementedException("Need to implement this method !!");
+	}
+	
+	@Override
+	public Object getValue() {
+		return btnSequence;
 	}
 	
 }

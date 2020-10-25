@@ -1,13 +1,13 @@
 package main.model.youtube.keyboard;
 
-import main.model.Command;
+import main.model.OldCommand;
 
 public class NextKeyNodeCommand {
 	
 	public KeyNode nextKeyNode;
-	public Command charDirection;
+	public OldCommand charDirection;
 	
-	public NextKeyNodeCommand(KeyNode nextKeyNode, Command charDirection) {
+	public NextKeyNodeCommand(KeyNode nextKeyNode, OldCommand charDirection) {
 		this.nextKeyNode = nextKeyNode;
 		this.charDirection = charDirection;
 	}

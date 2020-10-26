@@ -42,6 +42,11 @@ The communication protocol between the WS and the electronic device is explained
 With:
 - First, between parenthesis are declared usefully parameters. Currently, only the parameter TD exists, and means the time to keep the PIN activated by default when no time is specified. So TD=0.4 means that a PIN will be activated during 400 ms when no time is specified. If this parameter is not set, then the default time is set to 500ms.
 - Then, between "{}" is written the commands sequence
+- The '-' separates each command
+- The ';' is an optional character that separates the PIN number (on left) and the associated parameter (on right):
+  - if the parameter is a Double number, then it means the parameter is the time to keep the PIN pressed.
+  - if the parameter equals "ON", then it means that the PIN must be set to an ON state. It's the same logic for the "OFF" state.
+
 
 # Project example
 

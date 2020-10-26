@@ -36,7 +36,9 @@ with:
 # Sending protocol
 
 The communication protocol between the WS and the electronic device is explained here. After the electronic device requests the WS to get his commands, then the WS responds using the following syntax:
+```
 (TD=0.4){1;1.2-5-S;120-4-2-3}
+```
 With:
 - First, between parenthesis are declared usefully parameters. Currently, only the parameter TD exists, and means the time to keep the PIN activated by default when no time is specified. So TD=0.4 means that a PIN will be activated during 400 ms when no time is specified. If this parameter is not set, then the default time is set to 500ms.
 - Then, between "{}" is written the commands sequence

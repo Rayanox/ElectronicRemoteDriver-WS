@@ -2,7 +2,7 @@ package main.exceptions;
 
 import java.time.LocalTime;
 
-public class MissingCommandCaseException extends Exception {
+public class MissingCommandCaseException extends RuntimeException {
 
 	private static final long serialVersionUID = 1L;
 

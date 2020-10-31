@@ -1,6 +1,6 @@
 package main.exceptions;
 
-public class BadFormatPropertyException extends Exception {
+public class BadFormatPropertyException extends RuntimeException {
 	
 	/**
 	 * 
@@ -12,6 +12,10 @@ public class BadFormatPropertyException extends Exception {
 	}
 	
 	public BadFormatPropertyException(Exception exception) {
+		super(exception);
+	}
+	
+	public BadFormatPropertyException(String message, Exception exception) {
 		super(exception);
 	}
 }

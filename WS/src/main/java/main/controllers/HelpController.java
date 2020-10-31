@@ -17,7 +17,8 @@ import main.providers.youtube.YoutubePlaylistComposer;
 @RestController
 public class HelpController extends AbstractController {
 	
-	private final Class<?> [] controllerClasses = new Class<?> [] { CommandController.class, HelpController.class, InfosController.class, OperationController.class }; 
+	//TODO use Abstract controller instead and get children with reflection
+	private final Class<?> [] controllerClasses = new Class<?> [] { CommandController.class, HelpController.class, InfosController.class, OperationController.class, UtilsController.class }; 
 	
 	
 	@GetMapping(value = "/help", produces = {"application/json"})
@@ -94,6 +95,6 @@ public class HelpController extends AbstractController {
 		}
     	
     	return wsMethods;
-	}
+	}	
 	
 }

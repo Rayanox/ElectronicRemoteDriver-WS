@@ -1,9 +1,8 @@
-package main.model;
+package main.model.command.old;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-
 import main.exceptions.NotImplementedException;
+import main.model.DeviceAction;
 import main.storage.types.IStorageType;
 
 public class OldCommandSequence implements IStorageType {
@@ -29,18 +28,6 @@ public class OldCommandSequence implements IStorageType {
 	public void addBtnCommand(DeviceAction action, String stringParam) {
 		this.btnSequence.add(OldCommand.Create(action, stringParam));
 	}
-	
-	/*
-	 * Mapping
-	 */
-	public void addToCommandsMapping(String commandFrom, String commandTo) {
-		this.commandMapping.put(commandFrom, commandTo);
-	}
-	
-	/*
-	 * End Mapping
-	 */
-	
 	
 	public ArrayList<OldCommand> getBtnSequence() {
 		return btnSequence;

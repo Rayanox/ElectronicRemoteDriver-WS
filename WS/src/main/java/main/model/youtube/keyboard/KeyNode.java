@@ -2,8 +2,8 @@ package main.model.youtube.keyboard;
 
 import java.util.HashMap;
 
-import main.model.OldCommand;
 import main.model.DeviceAction;
+import main.model.command.old.OldCommand;
 
 public class KeyNode {
 	

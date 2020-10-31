@@ -1,6 +1,7 @@
-package main.model;
+package main.model.command.old;
 
 import main.exceptions.NotImplementedException;
+import main.model.DeviceAction;
 
 public class OldCommand {
 	private DeviceAction deviceAction;

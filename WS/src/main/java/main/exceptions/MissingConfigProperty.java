@@ -1,6 +1,6 @@
 package main.exceptions;
 
-public class MissingConfigProperty extends Exception {
+public class MissingConfigProperty extends RuntimeException {
 	/**
 	 * 
 	 */

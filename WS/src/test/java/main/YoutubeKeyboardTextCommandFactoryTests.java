@@ -20,7 +20,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import main.model.OldCommandSequenceBuilder;
+import main.model.command.old.OldCommandSequenceBuilder;
 import main.model.youtube.keyboard.IYoutubeKeyboardTextCommandFactory;
 
 //@RunWith(SpringRunner.class)

@@ -3,7 +3,7 @@ package main.model.youtube.keyboard;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import main.model.OldCommandSequenceBuilder;
+import main.model.command.old.OldCommandSequenceBuilder;
 
 public class YoutubeKeyboardTextCommandFactory implements IYoutubeKeyboardTextCommandFactory {
 

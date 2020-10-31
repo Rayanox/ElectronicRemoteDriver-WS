@@ -1,23 +1,19 @@
 package main.providers;
 
 import java.io.IOException;
-import java.sql.Time;
 import java.time.LocalTime;
 import java.util.Calendar;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import main.controllers.CommandController;
 import main.controllers.InfosController;
 import main.controllers.OperationController;
 import main.exceptions.BadFormatPropertyException;
 import main.exceptions.MissingCommandCaseException;
 import main.exceptions.NotImplementedException;
-import main.model.OldCommand;
-import main.model.OldCommandSequence;
-import main.model.OldCommandSequenceBuilder;
-import main.model.CommandSequence;
+import main.model.command.CommandSequence;
+import main.model.command.old.OldCommand;
+import main.model.command.old.OldCommandSequence;
+import main.model.command.old.OldCommandSequenceBuilder;
 import main.model.ContentType;
 import main.model.DeviceAction;
 import main.model.dto.CommandDto;
@@ -27,7 +23,6 @@ import main.storage.DataStorage;
 import main.storage.types.ConfTypeInt;
 import main.storage.types.ConfTypeString;
 import main.storage.types.ConfTypeTime;
-import main.utils.Helper;
 
 
 /**
@@ -51,7 +46,7 @@ public class CommandProvider implements ICommandProvider {
 	 *  New custom command function for devices
 	 */
 	
-	public String GetCommands_ForDevice(String programId, LocalTime time) throws BadFormatPropertyException, IOException, MissingCommandCaseException, NotImplementedException {
+	public String GetCommands_ForDevice(String programId, LocalTime time) throws Exception {
 		CommandSequence commandSequence = this.commandStorage.getCommandsForTime(programId, time);
 		return commandSequence.toStringRequest();
 	}

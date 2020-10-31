@@ -4,11 +4,13 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import main.exceptions.BadFormatPropertyException;
-import main.exceptions.NotImplementedException;
 import main.storage.types.IStorageType;
 /**
  * 
@@ -19,7 +21,10 @@ import main.storage.types.IStorageType;
  */
 public abstract class AbstractCachableConfStorage<T extends IStorageType, S extends IStorageType> extends AbstractStorageIO {
 
-	private HashMap<String, HashMap<T, S>> dataCacheMap;
+	private static final String COMMENT_CHAR = "#";
+	protected final T KEY_DEFAULT_CASE = null; 
+	
+	private HashMap<String, LinkedHashMap<T, S>> dataCacheMap;
 	private HashMap<String, Long> lastModificationDatesMap;
 	
 	public AbstractCachableConfStorage()  {
@@ -27,12 +32,12 @@ public abstract class AbstractCachableConfStorage<T extends IStorageType, S exte
 		this.lastModificationDatesMap = new HashMap<>();
 	}
 	
-	protected Optional<S> getData(T key, String keyFile) throws BadFormatPropertyException, IOException, NotImplementedException {
+	protected Optional<S> getData(T key, String keyFile) throws Exception {
 		S data = getAllDataS(keyFile).get(key);
 		return Optional.ofNullable(data);				
 	}
 	
-	protected HashMap<T, S> getAllDataS(String keyFile) throws BadFormatPropertyException, IOException, NotImplementedException {
+	protected LinkedHashMap<T, S> getAllDataS(String keyFile) throws Exception {
 		if(needToRefreshCache(keyFile))
 			refreshCache(keyFile);
 		
@@ -40,7 +45,7 @@ public abstract class AbstractCachableConfStorage<T extends IStorageType, S exte
 	}
 		
 	
-	protected void setData(T key, S data, String keyFile) throws IOException, BadFormatPropertyException, NotImplementedException {
+	protected void setData(T key, S data, String keyFile) throws Exception {
 		if(needToRefreshCache(keyFile))
 			this.refreshCache(keyFile);
 		
@@ -57,51 +62,80 @@ public abstract class AbstractCachableConfStorage<T extends IStorageType, S exte
 		this.lastModificationDatesMap.put(keyFile, this.getFileStorage(keyFile).get().lastModified());
 	}
 	
-	private void refreshCache(String fileKey) throws BadFormatPropertyException, IOException, NotImplementedException {
+	private synchronized void refreshCache(String fileKey) throws Exception {
 		File dataFile = getFileStorage(fileKey).orElse(new File(fileKey+"-newFileAutoCreatedByKey"));
 		if(!dataFile.exists())
 			dataFile.createNewFile();
 		
 		try {
-			HashMap<T, S> mapOfCurrentKey = this.dataCacheMap.get(fileKey);
+			LinkedHashMap<T, S> mapOfCurrentKey = this.dataCacheMap.get(fileKey);
 			if(mapOfCurrentKey == null) {
-				mapOfCurrentKey = new HashMap<>();
+				mapOfCurrentKey = new LinkedHashMap<>();
 				this.dataCacheMap.put(fileKey, mapOfCurrentKey);
 			}
 			
 			List<String> fileLines = readFromFile(dataFile);
-			int currentLine = 1;
-			for(String lineData : fileLines) {
-				String [] lineSplitted = lineData.split("=");
-				if(lineSplitted.length != 2)
-					throw new BadFormatPropertyException("The data conf contains a bad format property at line " + currentLine);
-				
-				String key = lineSplitted[0];
-				String value = lineSplitted[1];
-				
-				T keyObj = convertKeyFromString(key);
-				S valueObj = convertValueFromString(value);
-									
-				mapOfCurrentKey.put(keyObj, valueObj);
-				
+			boolean hasAloneValueBeenProcessed = false;
+			int currentLine = 0; 
+			for(String lineData : fileLines) {	
 				currentLine++;
+				lineData = removeCommentsAndSpaces(lineData);
+				
+				if(currentLine == 1 && isFirstLineSpecialProcessed()) {
+					processFirstLine(lineData, fileKey);
+					continue;
+				}
+				
+				if(lineData.isEmpty())
+					continue;
+				
+				T key = KEY_DEFAULT_CASE;
+				S value = null;
+				String [] lineSplitted = lineData.split("=");
+				if(lineSplitted.length > 2)
+					throw new BadFormatPropertyException("The data conf contains a bad format property (should be 'key=value') at line " + currentLine);
+				else if(lineSplitted.length == 1) {
+					if(!manageDefaultAloneValue())
+						throw new BadFormatPropertyException("The data conf contains a bad format property (should be 'key=value') at line " + currentLine);
+					
+					if(!hasAloneValueBeenProcessed) {
+						value = convertValueFromString(lineSplitted[0], fileKey);
+						hasAloneValueBeenProcessed = true;
+					}
+				}else { // Normal case
+					key = convertKeyFromString(lineSplitted[0]);
+					value = convertValueFromString(lineSplitted[1], fileKey);
+				}
+				
+				mapOfCurrentKey.put(key, value);					
 			}
 		} catch (FileNotFoundException e) {
 			System.out.println("WARN: When refreshing the cache, the file has not been found.");
 		}
 	}
+
 	
+	private String removeCommentsAndSpaces(String lineData) {
+		Pattern commentPattern = Pattern.compile("#.*#|#.*");
+		Matcher matcher = commentPattern.matcher(lineData);
+		return matcher.replaceAll("").trim();
+	}
+
 	private void writeToFile(HashMap<T, S> dataCacheMap, File file) throws IOException {
 		
 		List<String> outputFile = dataCacheMap.keySet().parallelStream() //Parallel not necessary (because low quantity of datas are processed) but just for my own practicing :)
-							.map((key) -> {
-								String keyString = key.convertToString();
-								String valueString = dataCacheMap.get(key).convertToString();
-								return keyString.concat("=").concat(valueString);
-							}).collect(Collectors.toList());
+							.map((key) -> writeConfigPropertyInOneLine(key, dataCacheMap))
+							.collect(Collectors.toList());
 		
-		writeToFile(outputFile, file);
+		super.writeToFile(outputFile, file);
 	}
+	
+	private String writeConfigPropertyInOneLine(T key, HashMap<T, S> dataCacheMap) {
+		String keyString = key.convertToString();
+		String valueString = dataCacheMap.get(key).convertToString();
+		return keyString.concat("=").concat(valueString);
+	}
+	
 	
 	private boolean needToRefreshCache(String keyFile) {
 		File storageFile = getFileStorage(keyFile).orElse(null);
@@ -114,7 +148,12 @@ public abstract class AbstractCachableConfStorage<T extends IStorageType, S exte
 	 * Inherited functions
 	 */
 	
-	protected abstract T convertKeyFromString(String key) throws NotImplementedException;
-	protected abstract S convertValueFromString(String value) throws NotImplementedException;
+	protected abstract T convertKeyFromString(String key) throws Exception;
+	protected abstract S convertValueFromString(String value, String programId) throws Exception;
 	protected abstract Optional<File> getFileStorage(String key);
+	
+	protected abstract boolean isFirstLineSpecialProcessed();
+	protected abstract void processFirstLine(String line, String programId);
+	
+	protected abstract boolean manageDefaultAloneValue();
 }

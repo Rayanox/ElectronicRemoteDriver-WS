@@ -1,6 +1,6 @@
 package main.model.youtube.keyboard;
 
-import main.model.OldCommand;
+import main.model.command.old.OldCommand;
 
 public class NextKeyNodeCommand {
 	

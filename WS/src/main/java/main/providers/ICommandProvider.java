@@ -1,13 +1,9 @@
 package main.providers;
 
-import java.io.IOException;
 import java.time.LocalTime;
 
-import main.exceptions.BadFormatPropertyException;
-import main.exceptions.MissingCommandCaseException;
-import main.exceptions.NotImplementedException;
-import main.model.OldCommandSequence;
 import main.model.ContentType;
+import main.model.command.old.OldCommandSequence;
 import main.model.dto.CommandDto;
 
 public interface ICommandProvider {
@@ -28,5 +24,5 @@ public interface ICommandProvider {
 	/*
 	 *  New Custom commands for devices
 	 */
-	String GetCommands_ForDevice(String programId, LocalTime time) throws BadFormatPropertyException, IOException, MissingCommandCaseException, NotImplementedException;
+	String GetCommands_ForDevice(String programId, LocalTime time) throws Exception;
 }

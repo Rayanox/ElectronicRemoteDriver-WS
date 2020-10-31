@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import main.controllers.common.AbstractController;
-import main.model.OldCommandSequence;
-import main.model.OldCommandSequenceBuilder;
 import main.model.ContentType;
 import main.model.ErrorBuilder;
+import main.model.command.old.OldCommandSequence;
+import main.model.command.old.OldCommandSequenceBuilder;
 import main.model.dto.CommandDto;
 import main.providers.ICommandProvider;
 import main.providers.InfoChannel;

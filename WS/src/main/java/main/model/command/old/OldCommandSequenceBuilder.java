@@ -1,9 +1,10 @@
-package main.model;
+package main.model.command.old;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 import main.exceptions.NotImplementedException;
+import main.model.DeviceAction;
 import main.model.youtube.keyboard.IYoutubeKeyboardTextCommandFactory;
 import main.model.youtube.keyboard.YoutubeKeyboardTextCommandFactory;
 

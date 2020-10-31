@@ -2,10 +2,13 @@ package main.storage;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
-
-import main.exceptions.BadFormatPropertyException;
+import java.util.stream.Collectors;
 import main.storage.types.IStorageType;
 /**
  * 

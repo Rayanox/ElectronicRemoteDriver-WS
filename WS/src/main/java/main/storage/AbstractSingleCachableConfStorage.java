@@ -23,11 +23,11 @@ public abstract class AbstractSingleCachableConfStorage<T extends IStorageType, 
 		this.fileStorage = new File(getFileStorageLocation());
 	}
 	
-	public Optional<S> getData(T key) throws BadFormatPropertyException, IOException, NotImplementedException {
+	public Optional<S> getData(T key) throws Exception {
 		return super.getData(key, null);
 	}
 
-	public void setData(T key, S data) throws IOException, BadFormatPropertyException, NotImplementedException {
+	public void setData(T key, S data) throws Exception {
 		super.setData(key, data, null);
 	}
 	
@@ -36,6 +36,12 @@ public abstract class AbstractSingleCachableConfStorage<T extends IStorageType, 
 		return Optional.of(this.fileStorage);
 	}
 	
+	@Override
+	protected S convertValueFromString(String value, String programId) throws NotImplementedException {
+		return convertValueFromString(value);
+	}
+	
 	
 	protected abstract String getFileStorageLocation();	
+	protected abstract S convertValueFromString(String value) throws NotImplementedException;
 }

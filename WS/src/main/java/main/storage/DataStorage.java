@@ -1,29 +1,21 @@
 package main.storage;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.sql.Time;
-import java.util.HashMap;
 import org.springframework.stereotype.Repository;
-import main.exceptions.BadFormatPropertyException;
 import main.exceptions.NotImplementedException;
 import main.storage.types.ConfTypeDouble;
 import main.storage.types.ConfTypeString;
 import main.storage.types.ConfTypeTime;
 import main.storage.types.IStorageType;
-import main.utils.Converter;
 
 @Repository
 public class DataStorage extends AbstractSingleCachableConfStorage<ConfTypeString, IStorageType>{
 	
-	private final String cacheLocation = "config" + File.separator + "StoredData.conf";
-	
+	private static final String CACHE_LOCATION = "config" + File.separator + "StoredData.conf";
 
 	@Override
 	protected String getFileStorageLocation() {
-		return this.cacheLocation;
+		return CACHE_LOCATION;
 	}
 
 	@Override
@@ -50,6 +42,20 @@ public class DataStorage extends AbstractSingleCachableConfStorage<ConfTypeStrin
 			return valueData;
 		
 		throw new NotImplementedException(String.join(" ", "The string value cannot be converted. Need to implement a new conf type for value '", value, "'")); // Ne doit pas rentrer dedans en principe
+	}
+
+	@Override
+	protected boolean isFirstLineSpecialProcessed() {
+		return false;
+	}
+
+	@Override
+	protected void processFirstLine(String line, String programId) {
+	}
+
+	@Override
+	protected boolean manageDefaultAloneValue() {
+		return false;
 	}
 
 	

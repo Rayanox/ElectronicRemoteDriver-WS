@@ -1,6 +1,8 @@
 package main.storage;
 
-import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 import org.springframework.stereotype.Repository;
 import main.exceptions.NotImplementedException;
 import main.storage.types.ConfTypeDouble;
@@ -11,7 +13,8 @@ import main.storage.types.IStorageType;
 @Repository
 public class DataStorage extends AbstractSingleCachableConfStorage<ConfTypeString, IStorageType>{
 	
-	private static final String CACHE_LOCATION = "config" + File.separator + "StoredData.conf";
+	private static final String CACHE_LOCATION = "StoredData.conf";
+	private static final String FOLDER_LOCATION = "config";
 
 	@Override
 	protected String getFileStorageLocation() {
@@ -56,6 +59,11 @@ public class DataStorage extends AbstractSingleCachableConfStorage<ConfTypeStrin
 	@Override
 	protected boolean manageDefaultAloneValue() {
 		return false;
+	}
+
+	@Override
+	protected Path getPathFolderStorageLocation() {
+		return Paths.get(FOLDER_LOCATION);
 	}
 
 	

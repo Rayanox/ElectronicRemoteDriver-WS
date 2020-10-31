@@ -2,6 +2,8 @@ package main.storage;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Optional;
 
 import main.exceptions.BadFormatPropertyException;
@@ -17,10 +19,10 @@ import main.storage.types.IStorageType;
  */
 public abstract class AbstractSingleCachableConfStorage<T extends IStorageType, S extends IStorageType> extends AbstractCachableConfStorage<T, S> {
 
-	private final File fileStorage;
+	private final Path fileStoragePath;
 		
 	public AbstractSingleCachableConfStorage() {
-		this.fileStorage = new File(getFileStorageLocation());
+		this.fileStoragePath = Paths.get(getFileStorageLocation());
 	}
 	
 	public Optional<S> getData(T key) throws Exception {
@@ -32,8 +34,8 @@ public abstract class AbstractSingleCachableConfStorage<T extends IStorageType, 
 	}
 	
 	
-	protected Optional<File> getFileStorage(String fileKey) {
-		return Optional.of(this.fileStorage);
+	protected Path getPathFileStorage(String fileKey) {
+		return this.fileStoragePath;
 	}
 	
 	@Override

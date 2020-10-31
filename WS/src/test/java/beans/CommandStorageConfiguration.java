@@ -19,7 +19,7 @@ public class CommandStorageConfiguration {
 
 	@Bean
 	public CommandStorage getCommandStorage() {
-		CommandStorage.CACHE_FOLDER_LOCATION = "./src/test/resources/commands";
+		CommandStorage.COMMAND_FOLDER_LOCATION = "./src/test/resources/commands";
 		return new CommandStorage();
 	}
 	

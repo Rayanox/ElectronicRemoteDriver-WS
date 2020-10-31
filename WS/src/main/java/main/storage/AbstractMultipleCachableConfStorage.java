@@ -19,10 +19,7 @@ import main.storage.types.IStorageType;
  */
 public abstract class AbstractMultipleCachableConfStorage<T extends IStorageType, S extends IStorageType> extends AbstractCachableConfStorage<T, S> {
 
-	private final File filefolder;
-		
 	public AbstractMultipleCachableConfStorage() {
-		this.filefolder = new File(getFolderStorageLocation());
 	}
 	
 	
@@ -35,12 +32,12 @@ public abstract class AbstractMultipleCachableConfStorage<T extends IStorageType
 //	}
 	
 	
-	protected Optional<File> getFileStorage(String fileKey) {
-		return Arrays.stream(this.filefolder.listFiles())
+	protected Path getPathFileStorage(String fileKey) {
+		return Arrays.stream(super.folder.listFiles())
 				.filter(file -> file.getName().contains("-"))
 				.filter(file -> file.getName().startsWith(fileKey))
-				.findFirst();
+				.map(file -> Paths.get(file.getName()))
+				.findFirst()
+				.orElse(Paths.get(fileKey));
 	}
-	
-	protected abstract String getFolderStorageLocation();	
 }

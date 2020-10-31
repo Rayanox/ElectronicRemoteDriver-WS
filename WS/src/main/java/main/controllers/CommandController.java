@@ -1,5 +1,6 @@
 package main.controllers;
 
+import java.time.LocalTime;
 import java.util.Calendar;
 
 import org.apache.logging.log4j.util.Strings;
@@ -27,6 +28,20 @@ public class CommandController extends AbstractController{
 	@Autowired
 	ICommandProvider commandProvider;
 
+	@RequestMapping(value = "/getCommandsForDevice", method = RequestMethod.GET)
+    public String getCommandsForDevice(@RequestParam(value = "token") String token, @RequestParam(value = "programId") String programId) throws AuthenticationException {
+    	String failedAuthMessage = processAuthorization(token);
+    	if(failedAuthMessage != null)
+    		return failedAuthMessage;
+    	
+    	try {
+			return commandProvider.GetCommands_ForDevice(programId, LocalTime.now());
+    	}catch(Exception e) {
+    		return ErrorBuilder.buildError(formatStringException(e));
+    	}
+    }
+	
+	@Deprecated()
     @RequestMapping(value = "/getCommands", method = RequestMethod.GET)
     public String GetCommands(@RequestParam(value = "token") String token, Character contentTypeCode) throws AuthenticationException {
     	String failedAuthMessage = processAuthorization(token);

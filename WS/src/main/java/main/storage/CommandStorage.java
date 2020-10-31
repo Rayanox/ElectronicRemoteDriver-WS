@@ -1,5 +1,7 @@
 package main.storage;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -16,7 +18,7 @@ import main.storage.types.IntervalleTime;
 @Repository
 public class CommandStorage extends AbstractMultipleCachableConfStorage<IntervalleTime, CommandSequence>{
 	
-	public static String CACHE_FOLDER_LOCATION = "commands";
+	public static String COMMAND_FOLDER_LOCATION = "commands";
 	
 	private HashMap<String, HashMap<String, String>> commandMappingByProgramId; // The mapping between commands in config file and command in the out request
 	
@@ -66,8 +68,8 @@ public class CommandStorage extends AbstractMultipleCachableConfStorage<Interval
 
 	
 	@Override
-	protected String getFolderStorageLocation() {
-		return CACHE_FOLDER_LOCATION;
+	protected Path getPathFolderStorageLocation() {
+		return Paths.get(COMMAND_FOLDER_LOCATION);
 	}
 
 	@Override

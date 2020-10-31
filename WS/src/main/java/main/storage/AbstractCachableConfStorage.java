@@ -3,6 +3,8 @@ package main.storage;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -27,9 +29,16 @@ public abstract class AbstractCachableConfStorage<T extends IStorageType, S exte
 	private HashMap<String, LinkedHashMap<T, S>> dataCacheMap;
 	private HashMap<String, Long> lastModificationDatesMap;
 	
+	protected final File folder;
+	
 	public AbstractCachableConfStorage()  {
 		this.dataCacheMap = new HashMap<>();
 		this.lastModificationDatesMap = new HashMap<>();
+		
+		this.folder = getPathFolderStorageLocation().toFile();
+		
+		if(!this.folder.exists())
+			this.folder.mkdirs();
 	}
 	
 	protected Optional<S> getData(T key, String keyFile) throws Exception {
@@ -50,7 +59,7 @@ public abstract class AbstractCachableConfStorage<T extends IStorageType, S exte
 			this.refreshCache(keyFile);
 		
 		HashMap<T, S> cache = this.dataCacheMap.get(keyFile);
-		File file = getFileStorage(keyFile).get();
+		File file = getFileStorage(keyFile);
 		
 		// Put in cache map
 		cache.put(key, data);
@@ -59,13 +68,11 @@ public abstract class AbstractCachableConfStorage<T extends IStorageType, S exte
 		writeToFile(cache, file);
 		
 		// Update the last modified time (for cache)
-		this.lastModificationDatesMap.put(keyFile, this.getFileStorage(keyFile).get().lastModified());
+		this.lastModificationDatesMap.put(keyFile, this.getFileStorage(keyFile).lastModified());
 	}
 	
 	private synchronized void refreshCache(String fileKey) throws Exception {
-		File dataFile = getFileStorage(fileKey).orElse(new File(fileKey+"-newFileAutoCreatedByKey"));
-		if(!dataFile.exists())
-			dataFile.createNewFile();
+		File dataFile = getFileStorage(fileKey);
 		
 		try {
 			LinkedHashMap<T, S> mapOfCurrentKey = this.dataCacheMap.get(fileKey);
@@ -138,19 +145,38 @@ public abstract class AbstractCachableConfStorage<T extends IStorageType, S exte
 	
 	
 	private boolean needToRefreshCache(String keyFile) {
-		File storageFile = getFileStorage(keyFile).orElse(null);
+		File storageFile = getFileStorage(keyFile);
 		long lastmodificationDateRecorded = this.lastModificationDatesMap.getOrDefault(keyFile, 0L);
 		return dataCacheMap.get(keyFile) == null || dataCacheMap.get(keyFile).isEmpty() || storageFile == null || (storageFile.lastModified() > lastmodificationDateRecorded);
 	}
 
 
+	private File getFileStorage(String fileKey) {
+		File file = Paths.get(getPathFolderStorageLocation().toString(), getPathFileStorage(fileKey).toString()).toFile();
+		
+		try {
+			if(!file.exists()) {
+				if(fileKey == null)
+					file.createNewFile();
+				else {
+					file = Paths.get(getPathFolderStorageLocation().toString(), fileKey+"-newFileAutoCreatedByKey").toFile();
+					file.createNewFile();
+				}
+			}
+			return file;
+		} catch(IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
 	/*
 	 * Inherited functions
 	 */
 	
 	protected abstract T convertKeyFromString(String key) throws Exception;
 	protected abstract S convertValueFromString(String value, String programId) throws Exception;
-	protected abstract Optional<File> getFileStorage(String key);
+	protected abstract Path getPathFileStorage(String key);
+	protected abstract Path getPathFolderStorageLocation();
 	
 	protected abstract boolean isFirstLineSpecialProcessed();
 	protected abstract void processFirstLine(String line, String programId);
